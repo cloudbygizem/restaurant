@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Limoncello – Review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: Arial, sans-serif;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.15),
+            rgba(255,255,255,0.65),
+            rgba(255,255,255,0.85)
+        ),
+        url('https://i.postimg.cc/ryBVXgm8/Chat-GPT-Image-10-Ara-2025-10-55-35.png');
+    background-size: cover;
+    background-attachment: fixed;
+
+    color: #5A4A2E;
+}
+
+h1 {
+    font-size: 28px;
+    margin-top: 40px;
+    color: #b67e2b;
+}
+
+.container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.92);
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px #0002;
+}
+
+.star {
+    font-size: 44px;
+    cursor: pointer;
+    color: #ccc;
+    margin: 6px;
+    transition: 0.2s;
+}
+
+.star.selected {
+    color: #FFD54A;
+}
+
+textarea {
+    width: 95%;
+    height: 110px;
+    margin-top: 18px;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    background: #F4CD62;
+    color: #7a5514;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#thanks {
+    display: none;
+    margin-top: 30px;
+    font-size: 24px;
+    color: #7A5514;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Thank you for visiting Limoncello 🍋</h1>
+
+<div class="container">
+    <p>Please rate your order:</p>
+
+    <div id="stars">
+        <span class="star" data-v="1">★</span>
+        <span class="star" data-v="2">★</span>
+        <span class="star" data-v="3">★</span>
+        <span class="star" data-v="4">★</span>
+        <span class="star" data-v="5">★</span>
+    </div>
+
+    <textarea id="comment" placeholder="Tell us about your experience..."></textarea>
+
+    <button onclick="submitReview()">Submit</button>
+
+    <div id="thanks">🍋 Thank you for your review!</div>
+</div>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, doc, updateDoc }
+from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAHR7lF9odKk31UrK_WK8DUZbqNSZKDmNo",
+  authDomain: "order-app-4416e.firebaseapp.com",
+  projectId: "order-app-4416e",
+  storageBucket: "order-app-4416e.appspot.com",
+  messagingSenderId: "262474090596",
+  appId: "1:262474090596:web:2af310cccb61cc9b05b771"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let rating = 0;
+
+document.querySelectorAll(".star").forEach(star => {
+    star.onclick = () => {
+        rating = star.dataset.v;
+        document.querySelectorAll(".star").forEach(s => s.classList.remove("selected"));
+        for (let i = 0; i < rating; i++) {
+            document.querySelectorAll(".star")[i].classList.add("selected");
+        }
+    };
+});
+
+window.submitReview = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("orderId");
+
+    await updateDoc(doc(db, "orders", orderId), {
+        review: {
+            rating: Number(rating),
+            comment: document.getElementById("comment").value,
+            createdAt: Date.now()
+        }
+    });
+
+    document.getElementById("thanks").style.display = "block";
+};
+</script>
+
+</body>
+</html>
