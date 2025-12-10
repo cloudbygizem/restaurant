@@ -5,7 +5,7 @@
 <title>🍋 Limoncello – Live Order Board</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- QR Code Library -->
+<!-- QR Code Library (MUTLAKA EN ÜSTE) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
@@ -197,20 +197,23 @@ form button {
 <div id="qrModal">
   <div id="qrBox">
     <h3>Customer Review QR</h3>
-    <div class="pastelFrame"><div id="qrcode"></div></div>
+    <div class="pastelFrame">
+        <div id="qrcode"></div>
+    </div>
     <br><br>
     <button onclick="closeQR()">Close</button>
   </div>
 </div>
 
 <script type="module">
+/* IMPORT FIREBASE */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import {
   getFirestore, collection, addDoc, updateDoc,
   onSnapshot, doc
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-/* FIREBASE CONFIG – CORRECTED */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyAHR7lF9odKk31UrK_WK8DUZbqNSZKDmNo",
   authDomain: "order-app-4416e.firebaseapp.com",
@@ -227,14 +230,16 @@ const db = getFirestore(app);
 const ding = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
 function playDing(){ ding.currentTime = 0; ding.play(); }
 
-/* QR FUNCTION — FIXED */
+/* QR FUNCTION — FULLY FIXED */
 window.showQR = function(orderId) {
     qrModal.style.display = "flex";
-    qrcode.innerHTML = "";
+
+    const qrDiv = document.getElementById("qrcode");
+    qrDiv.innerHTML = "";  // MUST RESET
 
     const link = window.location.origin + "/restaurant/review.html?orderId=" + orderId;
 
-    new QRCode(qrcode, {
+    new QRCode(qrDiv, {
         text: link,
         width: 200,
         height: 200
