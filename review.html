@@ -11,7 +11,6 @@ body {
     padding: 0;
     text-align: center;
     font-family: Arial, sans-serif;
-
     background:
         linear-gradient(
             to bottom,
@@ -22,7 +21,6 @@ body {
         url('https://i.postimg.cc/ryBVXgm8/Chat-GPT-Image-10-Ara-2025-10-55-35.png');
     background-size: cover;
     background-attachment: fixed;
-
     color: #5A4A2E;
 }
 
@@ -106,39 +104,45 @@ button {
     <div id="thanks">🍋 Thank you for your review!</div>
 </div>
 
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+/* FIREBASE */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import { getFirestore, doc, updateDoc }
-from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+/* SAME CONFIG AS INDEX.HTML */
 const firebaseConfig = {
-  apiKey: "AIzaSyAHR7lF9odKk31UrK_WK8DUZbqNSZKDmNo",
-  authDomain: "order-app-4416e.firebaseapp.com",
-  projectId: "order-app-4416e",
-  storageBucket: "order-app-4416e.appspot.com",
-  messagingSenderId: "262474090596",
-  appId: "1:262474090596:web:2af310cccb61cc9b05b771"
+    apiKey: "AIzaSyAHR7lF9odKk31UrK_WK8DUZbqNSZKDmNo",
+    authDomain: "order-app-4416e.firebaseapp.com",
+    projectId: "order-app-4416e",
+    storageBucket: "order-app-4416e.appspot.com",
+    messagingSenderId: "262474090596",
+    appId: "1:262474090596:web:2af310cccb61cc9b05b771"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+/* STAR SELECTION */
 let rating = 0;
-
 document.querySelectorAll(".star").forEach(star => {
     star.onclick = () => {
         rating = star.dataset.v;
         document.querySelectorAll(".star").forEach(s => s.classList.remove("selected"));
-        for (let i = 0; i < rating; i++) {
+        for (let i = 0; i < rating; i++)
             document.querySelectorAll(".star")[i].classList.add("selected");
-        }
     };
 });
 
+/* SUBMIT REVIEW */
 window.submitReview = async () => {
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get("orderId");
+
+    if (!orderId) {
+        alert("Missing order ID.");
+        return;
+    }
 
     await updateDoc(doc(db, "orders", orderId), {
         review: {
