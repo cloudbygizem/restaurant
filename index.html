@@ -2,157 +2,170 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Limoncello – Live Order Board</title>
+<title>🍋 Limoncello – Live Order Board</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     background:
-        linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.05),
-            rgba(255,255,255,0.35),
-            rgba(255,255,255,0.65),
-            rgba(255,255,255,0.88)
+        linear-gradient(to bottom,
+            rgba(255,255,255,0.1),
+            rgba(255,255,255,0.5),
+            rgba(255,255,255,0.85)
         ),
         url('https://i.postimg.cc/ryBVXgm8/Chat-GPT-Image-10-Ara-2025-10-55-35.png');
     background-size: cover;
-    background-position: center top;
     background-attachment: fixed;
-    color: #444;
+    color: #5a4a2e;
 }
+
 .header {
     text-align: center;
-    padding: 25px;
-    background: #FFEFAFEE;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-    font-size: 28px;
+    padding: 24px;
+    font-size: 32px;
+    background: #FFF4C7CC;
+    backdrop-filter: blur(6px);
     font-weight: bold;
+    color: #b67e2b;
     letter-spacing: 1px;
-    color: #c2852a;
 }
-.header span {
-    font-size: 34px;
-    margin-right: 10px;
-}
+
+/* FORM */
 form {
-    background: #ffffffd9;
-    padding: 15px;
-    border-radius: 12px;
-    max-width: 450px;
-    margin: 20px auto 35px auto;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    backdrop-filter: blur(4px);
-}
-form input, form button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 16px;
+    max-width: 500px;
+    margin: 20px auto;
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px #0003;
 }
 form input {
-    background: rgba(255,255,255,0.85);
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
 }
 form button {
-    background: #c7eace;
-    color: #2f7b4b;
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px;
     border: none;
-    cursor: pointer;
+    border-radius: 10px;
+    background: #F4CD62;
+    color: #7a5514;
     font-weight: bold;
+    cursor: pointer;
 }
-form button:hover { background: #b5e3be; }
+
+/* BOARD */
 .board {
     display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    flex-wrap: wrap;
-    padding: 0 15px;
+    gap: 18px;
+    padding: 20px;
 }
 .column {
-    width: 23%;
-    background: rgba(255,255,255,0.65);
-    backdrop-filter: blur(6px);
-    padding: 12px;
+    flex: 1;
+    background: rgba(255,255,255,0.75);
+    padding: 14px;
     border-radius: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.10);
-    min-height: 350px;
+    min-height: 420px;
+    box-shadow: 0 4px 10px #0002;
 }
 .column h2 {
     text-align: center;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    background: #fff8f2;
-    color: #a06620;
-    font-size: 20px;
-    box-shadow: inset 0 0 4px rgba(0,0,0,0.1);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+    border-bottom: 2px solid #ffe9b0;
+    color: #a46b21;
 }
-#newCol  { background: rgba(255,248,209,0.65); }
-#prepCol { background: rgba(255,227,194,0.65); }
-#readyCol{ background: rgba(223,247,227,0.65); }
-#collCol { background: rgba(228,236,255,0.65); }
+
+/* ORDER CARD */
 .order {
-    background: rgba(255,255,255,0.9);
-    padding: 12px;
-    margin-bottom: 12px;
+    background: white;
+    padding: 14px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    border-left: 6px solid #ddd;
-    backdrop-filter: blur(3px);
+    margin-bottom: 14px;
+    box-shadow: 0 3px 10px #0002;
 }
-.order-header {
+.name { font-size: 18px; font-weight: bold; color: #704b1f; }
+.items { margin-top: 6px; }
+.notes { margin-top: 6px; font-style: italic; opacity: 0.7; }
+
+.timerBox {
+    margin-top: 10px;
+    font-size: 14px;
+    background: #fff4d0;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+/* BUTTONS */
+.actionRow {
+    margin-top: 12px;
     display: flex;
-    align-items: center;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 17px;
+    gap: 8px;
 }
-.order-icon {
-    font-size: 24px;
-    margin-right: 10px;
-    opacity: .9;
-}
-.timer {
-    font-size: 13px;
-    opacity: 0.75;
-}
-.order button {
-    margin-right: 5px;
-    margin-top: 6px;
-    padding: 6px 10px;
-    border-radius: 6px;
+.actionRow button {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
-    font-size: 13px;
+    font-weight: bold;
+    color: white;
 }
-.btn-prep  { background: #ffb25d; color: #fff; }
-.btn-ready { background: #4caf50; color: #fff; }
-.btn-coll  { background: #5c7cff; color: #fff; }
-.order button:hover { opacity: 0.85; }
-.drag-over {
-    outline: 3px dashed #ffcb49;
-    background: rgba(255,236,179,0.35);
-    transition: 0.3s;
+.btn-prep { background: #FFB157; }
+.btn-ready { background: #72C478; }
+.btn-coll { background: #6F82FF; }
+
+/* REVIEW PREVIEW */
+.reviewPreview {
+    background: #FFF2C1;
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 10px;
+    border-left: 4px solid #F4CD62;
+    font-size: 14px;
 }
-#confettiCanvas {
+
+/* QR MODAL */
+#qrModal {
     position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:#0005;
+    display:none;
+    align-items:center;
+    justify-content:center;
+}
+#qrBox {
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    border:6px solid #FFE48F;
+    text-align:center;
+}
+.pastelFrame {
+    padding:16px;
+    background:#FFF9D7;
+    border-radius:12px;
+    display:inline-block;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header"><span>🍋</span>Limoncello – Mediterranean Breeze Order Board</div>
+<div class="header">🍋 Limoncello – Live Order Board</div>
 
+<!-- FORM -->
 <form id="orderForm">
     <input id="customerName" placeholder="Customer Name" required>
     <input id="itemSummary" placeholder="Item Summary" required>
@@ -160,133 +173,151 @@ form button:hover { background: #b5e3be; }
     <button type="submit">Add Order</button>
 </form>
 
+<!-- BOARD -->
 <div class="board">
-    <div class="column" id="newCol"  ondragover="allowDrop(event)" ondrop="dropCard(event,'New')">
+    <div class="column">
         <h2>✨ New</h2>
         <div id="newContainer"></div>
     </div>
-    <div class="column" id="prepCol" ondragover="allowDrop(event)" ondrop="dropCard(event,'Preparing')">
+    <div class="column">
         <h2>🍳 Preparing</h2>
         <div id="prepContainer"></div>
     </div>
-    <div class="column" id="readyCol" ondragover="allowDrop(event)" ondrop="dropCard(event,'Ready')">
+    <div class="column">
         <h2>✔️ Ready</h2>
         <div id="readyContainer"></div>
     </div>
-    <div class="column" id="collCol" ondragover="allowDrop(event)" ondrop="dropCard(event,'Collected')">
+    <div class="column">
         <h2>📦 Collected</h2>
         <div id="collContainer"></div>
     </div>
 </div>
 
-<canvas id="confettiCanvas"></canvas>
+<!-- QR MODAL -->
+<div id="qrModal">
+  <div id="qrBox">
+    <h3>Customer Review QR</h3>
+    <div class="pastelFrame"><div id="qrcode"></div></div>
+    <br><br>
+    <button onclick="closeQR()">Close</button>
+  </div>
+</div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, doc, collection, addDoc, onSnapshot, updateDoc }
-    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+/* FIREBASE IMPORTS */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, updateDoc,
+  onSnapshot, doc
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+/* FIXED CONFIG — ÇALIŞAN */
 const firebaseConfig = {
-    apiKey: "REPLACE_ME",
-    authDomain: "REPLACE_ME.firebaseapp.com",
-    projectId: "REPLACE_ME",
-    storageBucket: "REPLACE_ME.appspot.com",
-    messagingSenderId: "REPLACE_ME",
-    appId: "REPLACE_ME"
+  apiKey: "AIzaSyAHR7lF9odKk31UrK_WK8DUZbqNSZKDmNo",
+  authDomain: "order-app-4416e.firebaseapp.com",
+  projectId: "order-app-4416e",
+  storageBucket: "order-app-4416e.appspot.com",
+  messagingSenderId: "262474090596",
+  appId: "1:262474090596:web:2af310cccb61cc9b05b771"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-function iconFor(status) {
-    return { New:"✨", Preparing:"🍳", Ready:"✔️", Collected:"📦" }[status];
-}
+/* SOUND */
+const ding = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+ding.volume = 0.3;
+function playDing(){ ding.currentTime = 0; ding.play(); }
 
-function throwConfetti() {
-    const canvas = document.getElementById("confettiCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-    for (let i=0; i<200; i++){
-        setTimeout(()=>{
-            ctx.fillStyle = `hsl(${Math.random()*360}, 80%, 60%)`;
-            ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 8, 8);
-        }, i*5);
-    }
-}
+/* QR */
+function showQR(orderId){
+    qrModal.style.display="flex";
+    qrcode.innerHTML="";
+    const link = window.location.origin + "/restaurant/review.html?orderId=" + orderId;
 
-let draggedId = null;
-window.dragStart = (id) => { draggedId = id; };
-window.allowDrop = (e) => { e.preventDefault(); };
-window.dropCard = async (e, newStatus) => {
-    if (!draggedId) return;
-    await updateDoc(doc(db, "orders", draggedId), { status: newStatus, statusTimestamp: Date.now() });
-    if (newStatus === "Collected") throwConfetti();
+    new QRCode(qrcode, { text: link, width: 200, height: 200 });
+}
+window.closeQR = () => qrModal.style.display="none";
+
+/* UPDATE STATUS */
+window.updateStatus = async (id,newStatus)=>{
+    await updateDoc(doc(db,"orders",id),{
+        status:newStatus,
+        statusTimestamp:Date.now()
+    });
+    playDing();
 };
 
-onSnapshot(collection(db, "orders"), (snapshot) => {
-    newContainer.innerHTML = "";
-    prepContainer.innerHTML = "";
-    readyContainer.innerHTML = "";
-    collContainer.innerHTML = "";
-
-    snapshot.forEach((docSnap) => {
-        const order = docSnap.data();
-        const id = docSnap.id;
-        const elapsedCreated = Math.floor((Date.now() - order.timestamp) / 60000);
-        const elapsedStatus = Math.floor((Date.now() - (order.statusTimestamp || order.timestamp)) / 60000);
-
-        let card = document.createElement("div");
-        card.className = "order";
-        card.draggable = true;
-        card.ondragstart = () => dragStart(id);
-
-        card.innerHTML = `
-            <div class="order-header">
-                <span class="order-icon">${iconFor(order.status)}</span>
-                ${order.customerName}
-            </div>
-            <div>${order.itemSummary}</div>
-            <small>${order.notes || ""}</small><br><br>
-
-            <div class="timer">
-                Created: ${elapsedCreated}m ago<br>
-                In status: ${elapsedStatus}m
-            </div>
-
-            <button class="btn-prep" onclick="updateStatus('${id}','Preparing')">Preparing</button>
-            <button class="btn-ready" onclick="updateStatus('${id}','Ready')">Ready</button>
-            <button class="btn-coll" onclick="updateStatus('${id}','Collected')">Collected</button>
-        `;
-
-        if (order.status === "New") newContainer.appendChild(card);
-        if (order.status === "Preparing") prepContainer.appendChild(card);
-        if (order.status === "Ready") readyContainer.appendChild(card);
-        if (order.status === "Collected") collContainer.appendChild(card);
+/* ADD ORDER */
+orderForm.addEventListener("submit", async(e)=>{
+    e.preventDefault();
+    await addDoc(collection(db,"orders"),{
+        customerName:customerName.value,
+        itemSummary:itemSummary.value,
+        notes:notes.value,
+        status:"New",
+        timestamp:Date.now(),
+        statusTimestamp:Date.now()
     });
+    playDing();
+    orderForm.reset();
 });
 
-window.updateStatus = async (id, newStatus) => {
-    await updateDoc(doc(db, "orders", id), {
-        status: newStatus,
-        statusTimestamp: Date.now()
+/* REALTIME LIST */
+onSnapshot(collection(db,"orders"), snapshot=>{
+    newContainer.innerHTML="";
+    prepContainer.innerHTML="";
+    readyContainer.innerHTML="";
+    collContainer.innerHTML="";
+
+    snapshot.forEach(docSnap=>{
+        const o = docSnap.data();
+        const id = docSnap.id;
+
+        const createdMin = Math.floor((Date.now()-o.timestamp)/60000);
+        const statusMin = Math.floor((Date.now()-(o.statusTimestamp||o.timestamp))/60000);
+
+        const card = document.createElement("div");
+        card.className="order";
+
+        let timerColor = "#fff4d0";
+        if(statusMin>20) timerColor="#ffd2d2";
+        else if(statusMin>10) timerColor="#ffe6b3";
+
+        card.innerHTML=`
+            <div class='name'>${o.customerName}</div>
+            <div class='items'>${o.itemSummary}</div>
+            <div class='notes'>${o.notes||""}</div>
+
+            <div class='timerBox' style='background:${timerColor}'>
+                Created: ${createdMin} min ago<br>
+                In status: ${statusMin} min
+            </div>
+
+            <div class='actionRow'>
+                <button class='btn-prep'  onclick="updateStatus('${id}','Preparing')">Prep</button>
+                <button class='btn-ready' onclick="updateStatus('${id}','Ready')">Ready</button>
+                <button class='btn-coll'  onclick="updateStatus('${id}','Collected')">Collect</button>
+            </div>
+
+            ${
+                o.status==="Collected"
+                ? `<button style="margin-top:10px;width:100%" onclick="showQR('${id}')">⭐ Review QR</button>`
+                : ""
+            }
+
+            ${
+                o.review
+                ? `<div class="reviewPreview">⭐ Rating: ${o.review.rating}<br><i>${o.review.comment}</i></div>`
+                : ""
+            }
+        `;
+
+        if(o.status==="New") newContainer.appendChild(card);
+        if(o.status==="Preparing") prepContainer.appendChild(card);
+        if(o.status==="Ready") readyContainer.appendChild(card);
+        if(o.status==="Collected") collContainer.appendChild(card);
     });
-    if (newStatus === "Collected") throwConfetti();
-};
-
-document.getElementById("orderForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    await addDoc(collection(db, "orders"), {
-        customerName: customerName.value,
-        itemSummary: itemSummary.value,
-        notes: notes.value,
-        status: "New",
-        timestamp: Date.now(),
-        statusTimestamp: Date.now()
-    });
-
-    e.target.reset();
 });
 </script>
 
