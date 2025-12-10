@@ -204,14 +204,13 @@ form button {
 </div>
 
 <script type="module">
-/* FIREBASE IMPORTS */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import {
   getFirestore, collection, addDoc, updateDoc,
   onSnapshot, doc
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-/* FIXED CONFIG — ÇALIŞAN */
+/* FIREBASE CONFIG – CORRECTED */
 const firebaseConfig = {
   apiKey: "AIzaSyAHR7lF9odKk31UrK_WK8DUZbqNSZKDmNo",
   authDomain: "order-app-4416e.firebaseapp.com",
@@ -226,17 +225,22 @@ const db = getFirestore(app);
 
 /* SOUND */
 const ding = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
-ding.volume = 0.3;
 function playDing(){ ding.currentTime = 0; ding.play(); }
 
-/* QR */
-function showQR(orderId){
-    qrModal.style.display="flex";
-    qrcode.innerHTML="";
+/* QR FUNCTION — FIXED */
+window.showQR = function(orderId) {
+    qrModal.style.display = "flex";
+    qrcode.innerHTML = "";
+
     const link = window.location.origin + "/restaurant/review.html?orderId=" + orderId;
 
-    new QRCode(qrcode, { text: link, width: 200, height: 200 });
-}
+    new QRCode(qrcode, {
+        text: link,
+        width: 200,
+        height: 200
+    });
+};
+
 window.closeQR = () => qrModal.style.display="none";
 
 /* UPDATE STATUS */
@@ -263,7 +267,7 @@ orderForm.addEventListener("submit", async(e)=>{
     orderForm.reset();
 });
 
-/* REALTIME LIST */
+/* REALTIME LISTENER */
 onSnapshot(collection(db,"orders"), snapshot=>{
     newContainer.innerHTML="";
     prepContainer.innerHTML="";
@@ -277,12 +281,12 @@ onSnapshot(collection(db,"orders"), snapshot=>{
         const createdMin = Math.floor((Date.now()-o.timestamp)/60000);
         const statusMin = Math.floor((Date.now()-(o.statusTimestamp||o.timestamp))/60000);
 
-        const card = document.createElement("div");
-        card.className="order";
-
         let timerColor = "#fff4d0";
         if(statusMin>20) timerColor="#ffd2d2";
         else if(statusMin>10) timerColor="#ffe6b3";
+
+        const card = document.createElement("div");
+        card.className="order";
 
         card.innerHTML=`
             <div class='name'>${o.customerName}</div>
